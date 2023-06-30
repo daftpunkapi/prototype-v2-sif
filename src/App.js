@@ -1,9 +1,10 @@
-
+import io from 'socket.io-client';
 import './App.css';
 import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
 
+const socket = io.connect("http://10.1.229.100:3001");
 
 function App() {
   const [sessionId, setSessionId] = useState('');
@@ -41,8 +42,9 @@ function App() {
     // Document event listener for cursor position
     const handleMouseMove = (event) => {
     const { clientX, clientY } = event;
-    const timestamp = new Date().getTime();
-    setCursorPosition({ x: clientX, y: clientY, timestamp });
+    const timestampCursor = new Date().getTime();
+    setCursorPosition({ x: clientX, y: clientY, timestamp: timestampCursor });
+    socket.emit("cursorMove", {sessionId : sessionId, x: event.clientX, y: event.clientY, timestamp: timestampCursor})
     };
 
     document.addEventListener('mousemove', handleMouseMove);
@@ -51,7 +53,7 @@ function App() {
       // Cleanup the event listener when component unmounts
       document.removeEventListener('mousemove', handleMouseMove);
     };
-  }, []);
+  }, [sessionId]);
 
     // Generate Location Country via external API
     const fetchIPAddress = async () => {
@@ -75,8 +77,10 @@ function App() {
 
     // Mouse Click Events
     const handleMouseDown = (event) => {
+      const timestampClick = new Date().getTime();
       if (event.button === 0) { // Only capture left mouse clicks (button code 0)
         setClickCount((prevCount) => prevCount + 1);
+        socket.emit("mouseClick", {sessionId: sessionId, event: 'clickity', timestamp: timestampClick})
       }
     };
 
