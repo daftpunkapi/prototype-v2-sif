@@ -10,6 +10,8 @@ function App() {
   const [ipAddress, setIPAddress] = useState('');
   const [pasteCount, setPasteCount] = useState(0);
   const [clickCount, setClickCount] = useState(0);
+  const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0, timestamp: 0 });
+
 
   useEffect(() => {
     // Check if session ID exists in local storage
@@ -20,13 +22,13 @@ function App() {
       const currentTime = new Date().getTime();
       const storedTime = parseInt(storedTimestamp, 10);
 
-      if (currentTime - storedTime <= 300000) {
+      if (currentTime - storedTime <= 120000) {
         // Session ID is still valid, set it from local storage
         setSessionId(storedSessionId);
+        localStorage.setItem('timestamp', new Date().getTime().toString());
         return;
       }
     }
-
 
     // Generate a new session ID and update local storage
     const generatedSessionId = uuidv4();
@@ -35,6 +37,21 @@ function App() {
     localStorage.setItem('timestamp', new Date().getTime().toString());
   }, []);
 
+  useEffect(() => {
+    // Document event listener for cursor position
+    const handleMouseMove = (event) => {
+    const { clientX, clientY } = event;
+    const timestamp = new Date().getTime();
+    setCursorPosition({ x: clientX, y: clientY, timestamp });
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+
+    return () => {
+      // Cleanup the event listener when component unmounts
+      document.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
 
     // Generate Location Country via external API
     const fetchIPAddress = async () => {
@@ -56,7 +73,7 @@ function App() {
       }
     };
 
-    // HHH
+    // Mouse Click Events
     const handleMouseDown = (event) => {
       if (event.button === 0) { // Only capture left mouse clicks (button code 0)
         setClickCount((prevCount) => prevCount + 1);
@@ -88,6 +105,7 @@ function App() {
         <p />
         <p>Number of times password was copy-pasted: {pasteCount}</p>
         <p>Number of left mouse clicks: {clickCount}</p>
+        <p> Cursor Position: X: {cursorPosition.x}, Y: {cursorPosition.y}, Timestamp: {cursorPosition.timestamp} </p>
       </center>
     </div>
   );
