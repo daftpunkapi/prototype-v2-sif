@@ -2,7 +2,7 @@ const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
-const { Kafka } = require('kafkajs');
+const { Kafka, Partitioners } = require('kafkajs');
 
 const app = express();
 app.use(cors());
@@ -21,7 +21,9 @@ const kafka = new Kafka({
   brokers: ['localhost:9092'],
 });
 
-const producer = kafka.producer();
+const producer = kafka.producer({
+  createPartitioner: Partitioners.LegacyPartitioner,
+});
 
 const run = async () => {
   await producer.connect();
