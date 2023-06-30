@@ -2,6 +2,7 @@ const express = require('express');
 const http = require('http');
 const {Server} = require('socket.io');
 const cors = require('cors');
+const { Kafka } = require('kafkajs');
 
 
 const app = express();
@@ -16,17 +17,45 @@ const io = new Server(server, {
    }
 });
 
+const kafka = new Kafka({
+    clientId: 'my-app',
+    brokers: ['localhost:9092'] 
+  });
+
+const producer = kafka.producer();
+
+const run = async () => {
+await producer.connect();
+};
+
+run().catch((error) => {
+    console.error('Error connecting to Kafka:', error);
+    process.exit(1);
+  });
+
 io.on("connection", (socket) => {
     console.log(`A client has connected... ${socket.id}`);
 
     socket.on("cursorMove", (data) => {
-        console.log(data)
-    });
+        console.log(data);
+        producer.send({
+          topic: 'cursor_positions', 
+          messages: [
+            { value: JSON.stringify(data) }
+          ],
+        });
+      });
     
-    socket.on("mouseClick", (data) => {
-        console.log(data)
-    });
-
+      socket.on("mouseClick", (data) => {
+        console.log(data);
+        producer.send({
+          topic: 'mouse_clicks', 
+          messages: [
+            { value: JSON.stringify(data) }
+          ],
+        });
+      });
 });
+    
 
 server.listen(3001, ()=> {console.log('Server chal raha hain BC!')});
