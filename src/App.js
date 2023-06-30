@@ -4,15 +4,18 @@ import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
 
-const socket = io.connect("http://10.1.229.100:3001");
+const socket = io.connect('http://10.1.229.100:3001');
 
 function App() {
   const [sessionId, setSessionId] = useState('');
   const [ipAddress, setIPAddress] = useState('');
   const [pasteCount, setPasteCount] = useState(0);
   const [clickCount, setClickCount] = useState(0);
-  const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0, timestamp: 0 });
-
+  const [cursorPosition, setCursorPosition] = useState({
+    x: 0,
+    y: 0,
+    timestamp: 0,
+  });
 
   useEffect(() => {
     // Check if session ID exists in local storage
@@ -41,10 +44,15 @@ function App() {
   useEffect(() => {
     // Document event listener for cursor position
     const handleMouseMove = (event) => {
-    const { clientX, clientY } = event;
-    const timestampCursor = new Date().getTime();
-    setCursorPosition({ x: clientX, y: clientY, timestamp: timestampCursor });
-    socket.emit("cursorMove", {sessionId : sessionId, x: event.clientX, y: event.clientY, timestamp: timestampCursor})
+      const { clientX, clientY } = event;
+      const timestampCursor = new Date().getTime();
+      setCursorPosition({ x: clientX, y: clientY, timestamp: timestampCursor });
+      socket.emit('cursorMove', {
+        sessionId: sessionId,
+        x: event.clientX,
+        y: event.clientY,
+        timestamp: timestampCursor,
+      });
     };
 
     document.addEventListener('mousemove', handleMouseMove);
@@ -55,38 +63,43 @@ function App() {
     };
   }, [sessionId]);
 
-    // Generate Location Country via external API
-    const fetchIPAddress = async () => {
-      try {
-        const response = await axios.get('https://ipinfo.io/json?token=c072b528ff98a3');
-        const { country } = response.data;
-        setIPAddress(country);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchIPAddress();
+  // Generate Location Country via external API
+  const fetchIPAddress = async () => {
+    try {
+      const response = await axios.get(
+        'https://ipinfo.io/json?token=c072b528ff98a3'
+      );
+      const { country } = response.data;
+      setIPAddress(country);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  fetchIPAddress();
 
+  // Generate Copy-Paste Count in Password Field
+  const handlePaste = (event) => {
+    if (event.target.type === 'password') {
+      setPasteCount((prevCount) => prevCount + 1);
+    }
+  };
 
-    // Generate Copy-Paste Count in Password Field 
-    const handlePaste = (event) => {
-      if (event.target.type === 'password') {
-        setPasteCount((prevCount) => prevCount + 1);
-      }
-    };
-
-    // Mouse Click Events
-    const handleMouseDown = (event) => {
-      const timestampClick = new Date().getTime();
-      if (event.button === 0) { // Only capture left mouse clicks (button code 0)
-        setClickCount((prevCount) => prevCount + 1);
-        socket.emit("mouseClick", {sessionId: sessionId, event: 'clickity', timestamp: timestampClick})
-      }
-    };
-
+  // Mouse Click Events
+  const handleMouseDown = (event) => {
+    const timestampClick = new Date().getTime();
+    if (event.button === 0) {
+      // Only capture left mouse clicks (button code 0)
+      setClickCount((prevCount) => prevCount + 1);
+      socket.emit('mouseClick', {
+        sessionId: sessionId,
+        event: 'clickity',
+        timestamp: timestampClick,
+      });
+    }
+  };
 
   return (
-    <div onMouseDown={handleMouseDown} >
+    <div onMouseDown={handleMouseDown}>
       <center>
         <p />
         <br />
@@ -96,25 +109,45 @@ function App() {
         <br />
         <br />
         <form>
-          <input type="text" placeholder="E-mail" />
+          <input
+            type="text"
+            placeholder="E-mail"
+          />
           <p />
-          <input type="password" placeholder="Password" onPaste={handlePaste} />
+          <input
+            type="password"
+            placeholder="Password"
+            onPaste={handlePaste}
+          />
           <p />
           <button type="submit">Log In</button>
         </form>
         <p />
-        <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-        <p>Session ID: {sessionId}</p> 
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <p>Session ID: {sessionId}</p>
         <p />
-        <p>Your IP Address is: {ipAddress}</p> 
+        <p>Your IP Address is: {ipAddress}</p>
         <p />
         <p>Number of times password was copy-pasted: {pasteCount}</p>
         <p>Number of left mouse clicks: {clickCount}</p>
-        <p> Cursor Position: X: {cursorPosition.x}, Y: {cursorPosition.y}, Timestamp: {cursorPosition.timestamp} </p>
+        <p>
+          {' '}
+          Cursor Position: X: {cursorPosition.x}, Y: {cursorPosition.y},
+          Timestamp: {cursorPosition.timestamp}{' '}
+        </p>
       </center>
     </div>
   );
 }
 
 export default App;
-
