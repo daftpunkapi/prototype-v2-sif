@@ -91,7 +91,8 @@ function App() {
         <p />
         <br />
         <h1>Welcome!</h1>
-        <h4>powered by Flink 🐿️</h4>
+        <h4>powered by Flink </h4>
+        <h1>🐿️</h1>
         <br />
         <br />
         <form>
