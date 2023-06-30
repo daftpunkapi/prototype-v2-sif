@@ -51,7 +51,7 @@ function App() {
         sessionId: sessionId,
         x: event.clientX,
         y: event.clientY,
-        timestamp: timestampCursor,
+        timestamp_cursor: timestampCursor,
       });
     };
 
@@ -93,7 +93,7 @@ function App() {
       socket.emit('mouseClick', {
         sessionId: sessionId,
         event: 'clickity',
-        timestamp: timestampClick,
+        timestamp_clicks: timestampClick,
       });
     }
   };
