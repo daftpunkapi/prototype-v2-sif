@@ -1,42 +1,45 @@
 from flask import Flask
 from flask_cors import CORS
 from flask_socketio import SocketIO
+from kafka import KafkaProducer
+import json 
 
-from kafka import KafkaProducer, KafkaAdminClient
-from kafka.admin import NewTopic
-from kafka import errors
+# Remove unwanted log stream from console
+import logging
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
 
 app = Flask(__name__)
 CORS(app)
+app.config['SECRET_KEY'] = 'dpapi55'
 
-socketio = SocketIO(app, cors_allowed_origins='http://10.1.229.100:3000')
+socketio = SocketIO(app, cors_allowed_origins='*')
 
-producer = KafkaProducer(
-    bootstrap_servers='localhost:9092'
-)
-
-try:
-    admin_client = KafkaAdminClient(bootstrap_servers='localhost:9092')
-    admin_client.create_topics([
-        NewTopic(name='cursor_positions', num_partitions=1, replication_factor=1),
-        NewTopic(name='mouse_clicks', num_partitions=1, replication_factor=1)
-    ])
-except errors.TopicAlreadyExistsError:
-    pass
+producer = KafkaProducer(bootstrap_servers='localhost:9092')
+topic_clicks = 'mouse_clicks'
+topic_cursor = 'cursor_positions'
 
 @socketio.on('connect')
 def handle_connect():
-    print(f'A client has connected... {request.sid}')
+    print(f'A client has connected')
+
+@socketio.on('disconnect')
+def handle_disconnect():
+    print(f'Client disconnected')
 
 @socketio.on('cursorMove')
 def handle_cursor_move(data):
     print(data)
-    # producer.send('cursor_positions', value=bytes(json.dumps(data), 'utf-8'))
+    send_to_kafka(data, topic_cursor)
 
 @socketio.on('mouseClick')
 def handle_mouse_click(data):
     print(data)
-    producer.send('mouse_clicks', value=bytes(data, 'utf-8'))
+    send_to_kafka(data,topic_clicks)
+
+def send_to_kafka(data, topic):
+    record = json.dumps(data)
+    producer.send(topic, record.encode('utf-8'))
 
 if __name__ == '__main__':
     socketio.run(app, host='0.0.0.0', port=3001)
