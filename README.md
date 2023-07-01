@@ -13,6 +13,6 @@ pip3 install Flask-SocketIO Flask Flask-Cors
 
 # Starting the application on localhost / network
 
-Terminal 1 -> npm run server
+Terminal 1 -> python3 server.py
 Terminal 2 -> npm run start
 Terminal 3 -> python3 flink.py
