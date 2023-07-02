@@ -17,4 +17,5 @@ pip3 install confluent-kafka redis
 Terminal 1 -> python3 server.py  
 Terminal 2 -> npm run start  
 Terminal 3 -> python3 flink.py  
-Terminal 4 -> python3 redis_sink.py  
+Terminal 4 -> python3 redis_sink.py   
+
