@@ -16,8 +16,8 @@ try:
 except redis.exceptions.ConnectionError as e:
     print(f'Failed to connect to Redis: {e}')
 
-c=Consumer({'bootstrap.servers':'localhost:9092','group.id':'feature_group_upsert6','auto.offset.reset':'earliest'})
-c.subscribe(['feature_clicks_upsert'])
+c=Consumer({'bootstrap.servers':'localhost:9092','group.id':'feature_clicks_group','auto.offset.reset':'earliest'})
+c.subscribe(['feature_clicks'])
 
 
 def main():
@@ -43,7 +43,8 @@ def main():
        
 
         # Construct the key and value for Redis storage
-        redis_key = session_id
+        table_name = 'clicks_table'  # Specify the table name
+        redis_key = f'{table_name}:{session_id}'  # Include the table name in the key        
         redis_value = json.dumps({
             'avg_count_5s': avg_count_5s,
             'avg_count_10s': avg_count_10s,
