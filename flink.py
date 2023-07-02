@@ -1,6 +1,5 @@
 from pyflink.table import EnvironmentSettings, TableEnvironment
 from pyflink.table.expressions import *
-from pyflink.table.window import Tumble
 
 def log_processing():
 
@@ -101,31 +100,6 @@ def log_processing():
             ON t1.sessionId = t3.sessionId
     """
     t_env.execute_sql(merged_clicks).wait()
-
-
-    # Cursor Source 
-    # source_ddl_2 = """
-    #     CREATE TABLE cursor_positions(
-    #         sessionId VARCHAR,
-    #         x INT,
-    #         y INT,
-    #         timestamp_cursor BIGINT
-    #     ) WITH (
-    #         'connector' = 'kafka',
-    #         'topic' = 'cursor_positions',
-    #         'properties.bootstrap.servers' = 'localhost:9092',
-    #         'properties.group.id' = 'cursor_group',
-    #         'scan.startup.mode' = 'specific-offsets',
-    #         'scan.startup.specific-offsets' = 'partition:0,offset:0',
-    #         'json.fail-on-missing-field' = 'false',
-    #         'json.ignore-parse-errors' = 'true',
-    #         'format' = 'json'
-    #     )
-    #     """  
-    # t_env.execute_sql(source_ddl_2)
-    # tbl_cursor = t_env.from_path('cursor_positions')
-    # tbl_cursor.print_schema()
-    # tbl_cursor.execute().print()
 
 
 if __name__ == '__main__':
