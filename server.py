@@ -1,4 +1,4 @@
-from flask import Flask, request, Response
+from flask import Flask, request
 from flask_cors import CORS
 from flask_socketio import SocketIO
 from kafka import KafkaProducer
@@ -46,8 +46,7 @@ def sessionId_input():
     body_params = request.json
     sessionId = body_params['sessionId']
     print("The session ID of the user is:", sessionId)
-    response_data = {'message': 'Session ID received successfully'}
-    response = Response(json.dumps(response_data), mimetype='application/json')
+    response = json.dumps('Session ID received!')
     return response
 
 
