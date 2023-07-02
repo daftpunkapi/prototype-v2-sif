@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request, Response
 from flask_cors import CORS
 from flask_socketio import SocketIO
 from kafka import KafkaProducer
@@ -40,6 +40,16 @@ def handle_mouse_click(data):
 def send_to_kafka(data, topic):
     record = json.dumps(data)
     producer.send(topic, record.encode('utf-8'))
+
+@app.route('/session_input', methods=['POST'])
+def sessionId_input():
+    body_params = request.json
+    sessionId = body_params['sessionId']
+    print("The session ID of the user is:", sessionId)
+    response_data = {'message': 'Session ID received successfully'}
+    response = Response(json.dumps(response_data), mimetype='application/json')
+    return response
+
 
 if __name__ == '__main__':
     socketio.run(app, host='0.0.0.0', port=3001)
