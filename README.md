@@ -4,13 +4,17 @@ npm i
 
 ## Create python venv and install python packages
 
-python -m venv flink  
+```python
+python -m venv flink
 source flink/bin/activate
+```
 
-pip3 install --upgrade pip  
-pip3 install apache-flink kafka-python  
-pip3 install Flask-SocketIO Flask Flask-Cors  
-pip3 install confluent-kafka redis
+```python
+pip3 install --upgrade pip
+pip3 install apache-flink
+pip install confluent-kafka redis
+pip3 install Flask-SocketIO Flask Flask-Cors kafka-python
+```
 
 ## Starting the application on localhost / network
 
