@@ -4,12 +4,12 @@ npm i
 
 ## Create python venv and install python packages
 
-```python
+```bash
 python -m venv flink
 source flink/bin/activate
 ```
 
-```python
+```bash
 pip3 install --upgrade pip
 pip3 install apache-flink
 pip install confluent-kafka redis
