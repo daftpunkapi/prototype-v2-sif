@@ -10,6 +10,7 @@ source flink/bin/activate
 ```
 
 <br>
+
 ```bash
 pip3 install --upgrade pip
 pip3 install apache-flink
