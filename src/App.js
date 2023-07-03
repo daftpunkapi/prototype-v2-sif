@@ -64,18 +64,20 @@ function App() {
   }, [sessionId]);
 
   // Generate Location Country via external API
-  const fetchIPAddress = async () => {
-    try {
-      const response = await axios.get(
-        'https://ipinfo.io/json?token=c072b528ff98a3'
-      );
-      const { country } = response.data;
-      setIPAddress(country);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  fetchIPAddress();
+  useEffect(() => {
+    const fetchIPAddress = async () => {
+      try {
+        const response = await axios.get(
+          'https://ipinfo.io/json?token=c072b528ff98a3'
+        );
+        const { country } = response.data;
+        setIPAddress(country);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchIPAddress();
+  }, []);
 
   // Generate Copy-Paste Count in Password Field
   const handlePaste = (event) => {
