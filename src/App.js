@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
 
-const socket = io.connect('http://10.1.228.71:3001');
+const socket = io.connect('http://localhost:3001');
 
 function App() {
   const [sessionId, setSessionId] = useState('');
