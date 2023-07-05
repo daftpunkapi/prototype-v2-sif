@@ -3,6 +3,7 @@ from flask_cors import CORS
 from flask_socketio import SocketIO
 from kafka import KafkaProducer
 import json 
+import joblib
 
 # Remove unwanted log stream from console
 import logging
@@ -48,6 +49,9 @@ def sessionId_input():
     print("The session ID of the user is:", sessionId)
     response = json.dumps('Session ID received!')
     return response
+
+
+# model = joblib.load('model/classifier.joblib')
 
 
 if __name__ == '__main__':
