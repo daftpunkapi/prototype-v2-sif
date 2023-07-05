@@ -3,7 +3,7 @@ from flask_cors import CORS
 from flask_socketio import SocketIO
 from kafka import KafkaProducer
 import json 
-import joblib
+from model.prediction import risk_predict
 
 # Remove unwanted log stream from console
 import logging
@@ -46,12 +46,13 @@ def send_to_kafka(data, topic):
 def sessionId_input():
     body_params = request.json
     sessionId = body_params['sessionId']
-    print("The session ID of the user is:", sessionId)
-    response = json.dumps('Session ID received!')
+    IP_country_code = body_params['IP_country_code']
+    paste_count = body_params['paste_count']
+    risk = risk_predict(sessionId,IP_country_code,paste_count)
+    print("The session ID of the user is : ", sessionId)
+    print("The risk factor for this session ID is : ", risk)
+    response = json.dumps(risk)
     return response
-
-
-# model = joblib.load('model/classifier.joblib')
 
 
 if __name__ == '__main__':
