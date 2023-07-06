@@ -30,12 +30,12 @@ def handle_disconnect():
 
 @socketio.on('cursorMove')
 def handle_cursor_move(data):
-    print(data)
+    # print(data)
     send_to_kafka(data, topic_cursor)
 
 @socketio.on('mouseClick')
 def handle_mouse_click(data):
-    print(data)
+    # print(data)
     send_to_kafka(data,topic_clicks)
 
 def send_to_kafka(data, topic):
