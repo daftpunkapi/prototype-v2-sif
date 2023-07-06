@@ -51,6 +51,7 @@ def sessionId_input():
     print("The session ID of the user is : ", sessionId)
     risk = risk_predict(sessionId,IP_country_code,paste_count)
     print("The risk factor for this session ID is : ", risk)
+    risk = risk.tolist()
     response = json.dumps(risk)
     return response
 
