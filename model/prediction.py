@@ -1,6 +1,6 @@
 import pandas as pd
 import joblib
-from redis_fetch_features import redis_fetch_features
+from model.redis_fetch_features import redis_fetch_features
 
 classifier = joblib.load('model/classifier.joblib')
 
