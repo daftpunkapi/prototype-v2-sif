@@ -100,6 +100,21 @@ function App() {
     }
   };
 
+  const handleLoginCheck = async (event) => {
+    event.preventDefault();
+    const body = {
+      sessionId: sessionId,
+      IP_country_code: ipAddress,
+      paste_count: pasteCount,
+    };
+    try {
+      const response = await axios.post('localhost:3001/session_input', body);
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div onMouseDown={handleMouseDown}>
       <center>
@@ -110,7 +125,7 @@ function App() {
         <h1>🐿️</h1>
         <br />
         <br />
-        <form>
+        <form onSubmit={handleLoginCheck}>
           <input
             type="text"
             placeholder="E-mail"
