@@ -108,7 +108,10 @@ function App() {
       paste_count: pasteCount,
     };
     try {
-      const response = await axios.post('localhost:3001/session_input', body);
+      const response = await axios.post(
+        'http://localhost:3001/session_input',
+        body
+      );
       console.log(response.data);
     } catch (error) {
       console.log(error);
