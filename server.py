@@ -48,8 +48,8 @@ def sessionId_input():
     sessionId = body_params['sessionId']
     IP_country_code = body_params['IP_country_code']
     paste_count = body_params['paste_count']
-    risk = risk_predict(sessionId,IP_country_code,paste_count)
     print("The session ID of the user is : ", sessionId)
+    risk = risk_predict(sessionId,IP_country_code,paste_count)
     print("The risk factor for this session ID is : ", risk)
     response = json.dumps(risk)
     return response
