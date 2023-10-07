@@ -68,7 +68,7 @@ function App() {
     const fetchIPAddress = async () => {
       try {
         const response = await axios.get(
-          'https://ipinfo.io/json?token=c072b528ff98a3'
+          'https://ipinfo.io/json?token=INSERT_YOUR_API_TOKEN'
         );
         const { country } = response.data;
         setIPAddress(country);
