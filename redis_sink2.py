@@ -4,9 +4,9 @@ from confluent_kafka import Consumer
 
 
 r = redis.Redis(
-  host='redis-17789.c240.us-east-1-3.ec2.cloud.redislabs.com',
+  host='INSERT_YOUR_HOST',
   port=17789,
-  password='h45ka0mIdaTW3YK4RdKUDmtngakqun5Z')
+  password='INSERT_YOUR_KEY')
 
 # Test the connection
 try:
