@@ -5,9 +5,9 @@ import json
 def redis_fetch_features(sessionId):
 
     r = redis.Redis(
-            host='redis-17789.c240.us-east-1-3.ec2.cloud.redislabs.com',
+            host='INSERT_YOUR_HOST',
             port=17789,   
-            password='h45ka0mIdaTW3YK4RdKUDmtngakqun5Z')    
+            password='INSERT_YOUR_KEY')    
     try:
         response = r.ping()
         if response:
